@@ -3,7 +3,7 @@
 
 from search_engine import search_engine
 import ConfigParser,logging
-import sys
+import sys,re
 
 reload(sys)
 sys.setdefaultencoding("utf8")
@@ -34,6 +34,13 @@ if __name__ == '__main__':
 
 		baidu = search_engine(configs[0])
 
-		result = baidu.search(u'\u6c47\u901a\u671f\u8d27')
+		result_list = baidu.search(u'\u6c47\u901a\u671f\u8d27')
+		for result in result_list:
 
-		
+			try:
+				show_url = result.get_show_url().text;
+				search_res = re.search(r'hsjrzbs',show_url)
+				if search_res != None:
+					print 1
+			except BaseException , e:
+				logging.error(repr(e))

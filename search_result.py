@@ -8,39 +8,41 @@ class search_result:
 
 	__RESULT_URL_ELEMENT_SELECTOR = "result_url_element_selector"
 	__RESULT_TITLE_ELEMENT_SELECTOR = "result_title_element_selector"
-	__RESULT_SHOW_URL_SELECTOR = "result_show_url_selector"
+	__RESULT_SHOW_URL_ELEMENT_SELECTOR = "result_show_url_element_selector"
+	__RESULT_SEM_ELEMENT_SELECTOR = "result_sem_element_selector"
 
 
-
-	def __init__(self,element,config):
+	def __init__(self,config,element):
 		self.element = element
-		self.result_title_element_selector = config.get(self.__RESULT_TITLE_ELEMENT_SELECTOR)
-		self.result_url_element_selector = config.get(self.__RESULT_URL_ELEMENT_SELECTOR)
-		self.result_show_url_selector = config.get(self.__RESULT_SHOW_URL_SELECTOR)
-	
+		self.__result_title_element_selector = config.get(self.__RESULT_TITLE_ELEMENT_SELECTOR)
+		self.__result_url_element_selector = config.get(self.__RESULT_URL_ELEMENT_SELECTOR)
+		self.__result_show_url_element_selector = config.get(self.__RESULT_SHOW_URL_ELEMENT_SELECTOR)
+		self.__result_sem_element_selector = config.get(self.__RESULT_SEM_ELEMENT_SELECTOR)
 
-	def get_title():
-		return element.find_element_by_css_selector(self.result_title_element_selector)
-	def url():
-		return element.find_element_by_css_selector(self.result_url_element_selector)
+	def get_title(self):
+		return self.element.find_element_by_css_selector(self.__result_title_element_selector)
+	def get_url(self):
+		return self.element.find_element_by_css_selector(self.__result_url_element_selector)
 
-	def show_url():
-		return element.find_element_by_css_selector(self.result_show_url_selector)
+	def get_show_url(self):
+		return self.element.find_element_by_css_selector(self.__result_show_url_element_selector)
+
+	def is_sem(self):
+		return self.element.find_element_by_css_selector(self.__result_sem_element_selector) != None
 
 def parser(driver,config):
 
 	result_element_selector = config.get(__RESULT_ELEMENT_SELECTOR)
 
 	result_element_list = driver.find_elements_by_css_selector(result_element_selector)
-	print result_element_list
-	result_list = []
-
+	
+	ret_list = []
 	for result_element in result_element_list:
+		ret = search_result(config,result_element)
+		ret_list.append(ret)
+#	return result_element_list
+	return ret_list
 
-		search_re = search_result(result_element,config)
-		result_list.append(search_re)
-
-	return result_list	
 
 def parses(page_source,config):
 	
